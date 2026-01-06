@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/snapshot/generate",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/snapshot/cleanup",
+      "schedule": "30 6 * * *"
+    }
+  ]
+}

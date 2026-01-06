@@ -1,16 +1,41 @@
-import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { NextResponse } from "next/server";
+import { supabase } from "@/lib/supabase";
+
+const RETENTION_DAYS = 10;
+
+function cutoffDateISO(): string {
+  const d = new Date();
+  d.setUTCDate(d.getUTCDate() - RETENTION_DAYS);
+  return d.toISOString().slice(0, 10);
+}
 
 export async function GET() {
-  const { error } = await supabase
-    .from('daily_snapshots')
-    .delete()
-    .lt('snapshot_date', new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10));
+  const cutoff = cutoffDateISO();
+
+  const { error, count } = await supabase
+    .from("daily_snapshots")
+    .delete({ count: "exact" })
+    .lt("snapshot_date", cutoff);
 
   if (error) {
-    console.error('Cleanup failed', error);
-    return NextResponse.json({ status: 'error' }, { status: 500 });
+    console.error("Snapshot cleanup failed", {
+      cutoff,
+      error,
+    });
+
+    return NextResponse.json(
+      { status: "error" },
+      { status: 500 }
+    );
   }
 
-  return NextResponse.json({ status: 'ok' });
+  console.log("Snapshot cleanup complete", {
+    cutoff,
+    deleted: count,
+  });
+
+  return NextResponse.json({
+    status: "ok",
+    deleted: count,
+  });
 }
