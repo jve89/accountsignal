@@ -21,6 +21,9 @@
 │   │   │   ├── report
 │   │   │   │   └── generate
 │   │   │   │       └── route.ts
+│   │   │   ├── signal-state
+│   │   │   │   └── generate
+│   │   │   │       └── route.ts
 │   │   │   └── snapshot
 │   │   │       ├── cleanup
 │   │   │       │   └── route.ts
@@ -40,14 +43,18 @@
 │   │   ├── platforms.ts
 │   │   ├── report
 │   │   │   └── assemble.ts
+│   │   ├── site.ts
 │   │   ├── snapshot
+│   │   │   ├── buildDailySignalState.ts
 │   │   │   ├── classifier.ts
 │   │   │   ├── collector.ts
+│   │   │   ├── getLatest.ts
 │   │   │   └── snapshot.ts
 │   │   └── supabase.ts
 │   └── types
 │       ├── DailySnapshot.ts
 │       └── Report.ts
-└── tsconfig.json
+├── tsconfig.json
+└── vercel.json
 
-16 directories, 35 files
+18 directories, 40 files

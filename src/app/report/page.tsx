@@ -23,11 +23,17 @@ export default function ReportPage() {
 
     try {
       const res = await fetch(`/api/report/generate?platform=${p}`);
-      if (!res.ok) throw new Error('Report not available');
+
+      if (!res.ok) {
+        throw new Error('Report unavailable');
+      }
+
       const data = await res.json();
       setReport(data);
     } catch {
-      setError('Today’s report is not available yet. Please check back later.');
+      setError(
+        'No completed signal snapshot is available yet. Signals update once per day.'
+      );
     } finally {
       setLoading(false);
     }
@@ -81,7 +87,7 @@ export default function ReportPage() {
           <article className="space-y-8">
             <div className="rounded-lg border border-slate-200 bg-slate-50 p-6">
               <div className="text-sm text-slate-500">
-                {report.platform} · {report.snapshotDate}
+                {report.platform} · Last updated: {report.snapshotDate}
               </div>
 
               <h2 className="mt-2 text-xl font-medium text-slate-900">
@@ -91,6 +97,11 @@ export default function ReportPage() {
               <div className="mt-2 text-sm text-slate-600">
                 Confidence level: <strong>{report.confidence}</strong>
               </div>
+
+              <p className="mt-4 text-sm text-slate-600">
+                Signals update once per day. This report reflects the most recent
+                completed snapshot.
+              </p>
             </div>
 
             {report.sections.map((s) => (
